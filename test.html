@@ -78,7 +78,9 @@
 
           try {
             // Moving api call to server to avoid exposing api key
-            const response = await axios.get("http://localhost:3000/weather");
+            const response = await axios.get(
+              "https://40df8yfdul.execute-api.us-east-1.amazonaws.com/prod/getWeather"
+            );
             this.setResults(response.data);
           } catch (error) {
             this.setError(error.message);
