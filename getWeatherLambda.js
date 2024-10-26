@@ -1,7 +1,13 @@
 const https = require("https");
 
 exports.handler = async (event) => {
-  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=35.98185553789852&lon=-86.79039428600794&appid=${process.env.OPENWEATHER_API_KEY}`;
+  // Default coordinates of Brentwood, TN
+  let lat = "35.98185553789852";
+  let lon = "-86.79039428600794";
+  if (event.queryStringParameters) {
+    ({ lat, lon } = event.queryStringParameters);
+  }
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.OPENWEATHER_API_KEY}`;
 
   return new Promise((resolve, reject) => {
     https

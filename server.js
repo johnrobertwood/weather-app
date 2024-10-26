@@ -21,6 +21,19 @@ app.get("/weather", (req, res) => {
     .catch((err) => res.send(err));
 });
 
+app.get("/getWeather", (req, res) => {
+  const lat = req.query.lat;
+  const lon = req.query.lon;
+  axios
+    .get(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${weatherApiKey}`
+    )
+    .then((response) => {
+      res.json(response.data);
+    })
+    .catch((err) => res.send(err));
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

@@ -8,12 +8,24 @@
     <title>Weather App for Brentwood</title>
 
     <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+      }
+
+      h1 {
+        text-align: center;
+        margin: 20px 0;
+      }
+
       .button-container {
         text-align: center;
       }
 
       .button-container > button {
-        margin: 0;
+        margin: 10px;
         padding: 10px 18px;
         color: white;
         background-color: #008000;
@@ -31,31 +43,42 @@
         background-color: #006000;
       }
 
+      /* Adding styles for location button */
+      .button-container > button.location-button {
+        padding: 0;
+        height: 36px;
+        width: 36px;
+      }
+
       /* Adding basic styles for results, and error messages */
       .test-results {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
         margin: 10px auto;
         padding: 15px;
         max-width: 600px;
+        height: 280px;
         border-radius: 8px;
+        background-color: #314948;
         text-align: center;
+        font-size: 16px;
+        color: white;
       }
 
       .error {
         color: red;
-      }
-
-      .weather-card {
-        padding: 10px;
-        border-radius: 8px;
-        background-color: lightslategray;
-        color: white;
       }
     </style>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
   <body>
-    <div class="test-results"></div>
+    <h1>FreightWise Weather App</h1>
+    <div class="test-results">
+      <p>Click the button below to get the current weather in Brentwood, TN.</p>
+      <p>Or click the location button to see your local weather</p>
+    </div>
 
     <div class="button-container"></div>
 
@@ -67,6 +90,34 @@
         constructor() {
           // Changing to return the element instead of HTML collection
           this.testResults = document.getElementsByClassName("test-results")[0];
+        }
+
+        /**
+         * A function that gets the user's location and fetch weather data.
+         */
+        async getUserLocation() {
+          if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+              async (position) => {
+                const { latitude, longitude } = position.coords;
+                try {
+                  // Fetch weather data with user's location as query params
+                  const response = await axios.get(
+                    `https://40df8yfdul.execute-api.us-east-1.amazonaws.com/prod/getWeather?lat=${latitude}&lon=${longitude}`
+                  );
+                  this.setResults(response.data);
+                } catch (error) {
+                  this.setError(error.message);
+                }
+              },
+              (error) => {
+                // User denied geolocation permission
+                this.setError(error.message);
+              }
+            );
+          } else {
+            this.setError("Geolocation is not available in your browser");
+          }
         }
 
         async run() {
@@ -85,10 +136,6 @@
           } catch (error) {
             this.setError(error.message);
           }
-
-          (error) => {
-            this.setError("Error getting weather data");
-          };
         }
 
         setError(message) {
@@ -105,13 +152,13 @@
           const humidity = results.main.humidity;
           const wind = Math.floor(results.wind.speed * 2.23); // Convert m/s to mph
 
-          const HTMLString = `<div class="weather-card">
+          const HTMLString = `
               <h2>Current Weather in ${results.name}</h2>
               <p><strong>Temperature:</strong> ${temperature} °F</p>
               <p><strong>Conditions:</strong> ${description}</p>
               <p><strong>Humidity:</strong> ${humidity}%</p>
               <p><strong>Wind Speed:</strong> ${wind} mph</p>
-            </div>`;
+            `;
           // Setting results to HTML string instead of data HTTP call, don't need to convert to string
           this.testResults.innerHTML = HTMLString || "";
         }
@@ -130,7 +177,7 @@
 
         testButton.type = "button";
         // Changing text to say Brentwood instead of Nashville
-        testButton.innerText = "Get the Brentwood Weather";
+        testButton.innerText = "Brentwood Weather";
         testButton.onclick = () => test.run();
 
         context.appendChild(testButton);
@@ -138,12 +185,30 @@
         // Removed unnessesary return statement since we are just setting things
       }
 
-      // Create the Test and add a button to the UI for running the test
+      /**
+       * Creates a button for finding user location and adds it to the DOM.
+       *
+       * @param {HTMLElement} context  the parent element to add the button to
+       * @param {Test}        test     the test to be executed
+       * @returns {HTMLElement} the button added to the test
+       */
+      function addButtonForGeoLocation(context, test) {
+        const locationButton = document.createElement("button");
+
+        locationButton.type = "button";
+        locationButton.className = "location-button";
+        locationButton.innerText = "\u2316";
+        locationButton.onclick = () => test.getUserLocation();
+
+        context.appendChild(locationButton);
+      }
+
+      // Create the Test and add buttons to the UI Brentwood and user location
       const test = new Test();
       const buttonContainer =
         document.getElementsByClassName("button-container")[0];
-
       addButtonForTest(buttonContainer, test);
+      addButtonForGeoLocation(buttonContainer, test);
     </script>
   </body>
 </html>
