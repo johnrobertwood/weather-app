@@ -1,0 +1,60 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+}
+
+h1 {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.button-container {
+  text-align: center;
+}
+
+.button-container > button {
+  margin: 10px;
+  padding: 10px 18px;
+  color: white;
+  background-color: #008000;
+  border: none;
+  border-radius: 3px;
+  transition: all 200ms ease-in-out;
+  font-size: 14px;
+}
+
+.button-container > button:hover {
+  background-color: #00a000;
+}
+
+.button-container > button:active {
+  background-color: #006000;
+}
+
+/* Adding styles for location button */
+.button-container > button.location-button {
+  padding: 0;
+  height: 36px;
+  width: 36px;
+}
+
+/* Adding basic styles for results, and error messages */
+.test-results {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 10px auto;
+  padding: 15px;
+  max-width: 600px;
+  height: 300px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  text-align: center;
+  font-size: 16px;
+}
+
+.error {
+  color: red;
+}
