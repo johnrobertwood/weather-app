@@ -1,6 +1,6 @@
 "use strict";
 
-// Moving Test class to same script as other JS at bottom of page
+// Moving JS to seperate file
 class Test {
   constructor() {
     // Changing to return the element instead of HTML collection
@@ -8,7 +8,7 @@ class Test {
   }
 
   /**
-   * A function that gets the user's location and fetch weather data.
+   * A function that gets the user's location and fetches weather data.
    */
   async getUserLocation() {
     if ("geolocation" in navigator) {

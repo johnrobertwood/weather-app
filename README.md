@@ -10,7 +10,7 @@ The app displays the temperature, conditions, humidity and wind speed in Brentwo
 
 ## Tech
 
-Results are fetched with Axios via a call to AWS API Gateway with Lambda serverless architechture.
+Results are fetched with Axios via a call to AWS API Gateway with Lambda serverless architecture.
 
 ## Local Development
 
