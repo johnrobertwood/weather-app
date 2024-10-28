@@ -7,7 +7,7 @@ const port = process.env.PORT || 3000;
 const weatherApiKey = process.env.OPENWEATHER_API_KEY;
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "/test.html"));
+  res.sendFile(path.join(__dirname, "/index.html"));
 });
 
 app.get("/weather", (req, res) => {
