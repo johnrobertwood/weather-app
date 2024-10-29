@@ -78,10 +78,9 @@ app.get("/weatherSMS", (req, res) => {
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_API_KEY}`
     )
     .then((weatherResponse) => {
-      debugger;
       const { main, weather, name } = weatherResponse.data;
       const temperature = main.temp
-        ? Math.floor(main.temp - 273.15)
+        ? Math.floor((results.main.temp - 273.15) * 1.8 + 32)
         : "Unknown temperature";
       const description = weather[0]?.description ?? "No description available";
       const location = name ?? "Unknown location";

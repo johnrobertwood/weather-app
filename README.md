@@ -14,4 +14,4 @@ Results are fetched with Axios via a call to AWS API Gateway with Lambda serverl
 
 ## Local Development
 
-To test using a local node server get an Open Weather API key and create a .env file using the .env.sample then run `npm install` and `npm run start`
+To test locally get an Open Weather API key and create a .env file using the .env.sample then run `npm install` and `npm start`

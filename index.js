@@ -11,6 +11,10 @@ class Test {
    * A function that gets the user's location and fetches weather data.
    */
   async getUserLocation() {
+    console.log(
+      new Date().toISOString(),
+      "Running user location weather data fetch"
+    );
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -36,11 +40,10 @@ class Test {
     }
   }
 
-  async run() {
+  async getBrentwoodWeather() {
     console.log(
       new Date().toISOString(),
-      "Weather Data",
-      "Running weather data fetch"
+      "Running Brentwood weather data fetch"
     );
 
     try {
@@ -67,19 +70,24 @@ class Test {
 
   setResults(results) {
     // Parse and display the results
-    const temperature = Math.floor((results.main.temp - 273.15) * 1.8 + 32); // Convert Kelvin to Fahrenheit
-    const description = results.weather[0].description;
-    const humidity = results.main.humidity;
-    const wind = Math.floor(results.wind.speed * 2.23); // Convert m/s to mph
+    const name = results.name || "Unknown location";
+    const temperature = results.main
+      ? Math.floor((results.main.temp - 273.15) * 1.8 + 32)
+      : "Unknown temperature"; // Convert Kelvin to Fahrenheit
+    const description =
+      results.weather[0]?.description ?? "No description available";
+    const humidity = results.main?.humidity || "Unknown humidity";
+    const wind = Math.floor(results.wind.speed * 2.23) ?? "Unknown wind speed"; // Convert m/s to mph
+    const icon = results.weather[0]?.icon || "01d";
 
     const HTMLString = `
     <div>
-        <h2>Current Weather in ${results.name}</h2>
+        <h2>Current Weather in ${name}</h2>
         <p><strong>Temperature:</strong> ${temperature} °F</p>
         <p><strong>Conditions:</strong> ${description}</p>
         <p><strong>Humidity:</strong> ${humidity}%</p>
         <p><strong>Wind Speed:</strong> ${wind} mph</p>
-        <img src="https://openweathermap.org/img/wn/${results.weather[0].icon}@2x.png" alt="${description}" />
+        <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="${description}" />
     </div>
       `;
     // Setting results to HTML string instead of data HTTP call, don't need to convert to string
@@ -101,7 +109,7 @@ function addButtonForTest(context, test) {
   testButton.type = "button";
   // Changing text to say Brentwood instead of Nashville
   testButton.innerText = "Brentwood Weather";
-  testButton.onclick = () => test.run();
+  testButton.onclick = () => test.getBrentwoodWeather();
 
   context.appendChild(testButton);
 
